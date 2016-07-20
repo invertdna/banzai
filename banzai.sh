@@ -947,7 +947,17 @@ else
 		fi
 
 		# BLAST CLUSTERS
-		blastn -query "${BLAST_INPUT}" -db "$BLAST_DB" -num_threads "$n_cores" -perc_identity "${PERCENT_IDENTITY}" -word_size "${WORD_SIZE}" -evalue "${EVALUE}" -max_target_seqs "${MAXIMUM_MATCHES}" -outfmt 5 -out "${TAG_DIR}"/10_BLASTed.xml
+	blastn \
+		-query "${BLAST_INPUT}" \
+		-db "${BLAST_DB}" \
+		-num_threads "$n_cores" \
+		-perc_identity "${PERCENT_IDENTITY}" \
+		-word_size "${WORD_SIZE}" \
+		-evalue "${EVALUE}" \
+		-max_target_seqs "${MAXIMUM_MATCHES}" \
+		-culling_limit="${CULLING}" \
+		-outfmt "6 qseqid sallseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids stitle" \
+		-out "${OUTFILE}"
 	done
 fi
 
@@ -979,6 +989,7 @@ for DIR in "$DIRECTORIES"; do
 		MEGAN_SHELL_SCRIPT="${DIR}"/megan_script.sh
 
 		echo "import blastfile='${BLAST_XML}' meganFile='${MEGAN_RMA_FILE}' \
+blastFormat=BlastTAB
 minScore=${MINIMUM_SCORE} \
 maxExpected=${MAX_EXPECTED} \
 topPercent=${TOP_PERCENT} \

@@ -13,14 +13,14 @@
 # If you want to run this interactively, just comment out the following line, un-comment the 8 lines after that, and make all of those the appropriate file paths/arguments (see numbers above).
 
 arguments<-commandArgs(TRUE)
-arguments <- c(
-  "/Users/threeprime/Desktop/debug.pdf",
-  "/Users/threeprime/temp_big/20150717_nextseq/Analysis_20151019_1918/all_lib/OTUs_swarm/OTU_table.csv",
-  "/Users/threeprime/temp_big/20150717_nextseq/SEQUENCING_POOL_20150618.csv",
-  "library",
-  "tag_sequence",
-  "sample_name",
-  "sample_type")
+# arguments <- c(
+  # "/Users/rpk/Desktop/debug.pdf",
+  # "/Users/rpk/Desktop/Analysis_20151019_1918/all_lib/OTUs_swarm/OTU_table.csv",
+  # "/Users/rpk/Desktop/SEQUENCING_POOL_20150618.csv",
+  # "library",
+  # "tag_sequence",
+  # "sample_name",
+  # "sample_type")
 
 
 pdf_file			<- arguments[1]
