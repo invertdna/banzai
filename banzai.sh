@@ -856,17 +856,17 @@ fi
 	# BLAST CLUSTERS
 	################################################################################
 	echo $(date +%H:%M) "BLASTing..."
-	blast_output="${DEREP_INPUT%/*}"/10_BLASTed.xml
+	blast_output="${DEREP_INPUT%/*}"/10_BLASTed.txt
 	blastn \
 		-query "${BLAST_INPUT}" \
-		-db "$BLAST_DB" \
+		-db "${BLAST_DB}" \
 		-num_threads "$n_cores" \
 		-perc_identity "${PERCENT_IDENTITY}" \
 		-word_size "${WORD_SIZE}" \
 		-evalue "${EVALUE}" \
 		-max_target_seqs "${MAXIMUM_MATCHES}" \
-		-culling_limit "${CULLING}" \
-		-outfmt 5 \
+		-culling_limit="${CULLING}" \
+		-outfmt "6 qseqid sallseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids stitle" \
 		-out "${blast_output}"
 
 	# check for blast output
@@ -946,7 +946,7 @@ else
 			BLAST_INPUT="${TAG_DIR}"/9_OTUs.fasta
 		fi
 
-		# BLAST CLUSTERS
+	# BLAST CLUSTERS
 	blastn \
 		-query "${BLAST_INPUT}" \
 		-db "${BLAST_DB}" \
@@ -957,7 +957,7 @@ else
 		-max_target_seqs "${MAXIMUM_MATCHES}" \
 		-culling_limit="${CULLING}" \
 		-outfmt "6 qseqid sallseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore staxids stitle" \
-		-out "${OUTFILE}"
+		-out "${TAG_DIR}"/10_BLASTed.txt
 	done
 fi
 
@@ -983,20 +983,20 @@ for DIR in "$DIRECTORIES"; do
 
 		echo $(date +%H:%M) 'BLAST output found; proceeding to MEGAN.'
 		# Specify paths to megan-related files
-		BLAST_XML="${DIR}"/10_BLASTed.xml
+		BLAST_tab="${DIR}"/10_BLASTed.txt
 		MEGAN_COMMAND_FILE="${DIR}"/megan_commands.txt
 		MEGAN_RMA_FILE="${DIR}"/meganfile.rma
 		MEGAN_SHELL_SCRIPT="${DIR}"/megan_script.sh
 
-		echo "import blastfile='${BLAST_XML}' meganFile='${MEGAN_RMA_FILE}' \
-blastFormat=BlastTAB \
+		echo "import blastfile='${BLAST_tab}' meganFile='${MEGAN_RMA_FILE}' \
 minScore=${MINIMUM_SCORE} \
 maxExpected=${MAX_EXPECTED} \
 topPercent=${TOP_PERCENT} \
 minSupportPercent=${MINIMUM_SUPPORT_PERCENT} \
 minSupport=${MINIMUM_SUPPORT} \
 minComplexity=${MINIMUM_COMPLEXITY} \
-lcapercent=${LCA_PERCENT};" > "${MEGAN_COMMAND_FILE}"
+lcapercent=${LCA_PERCENT} \
+blastFormat=BlastTAB;" > "${MEGAN_COMMAND_FILE}"
 		echo "update;" >> "${MEGAN_COMMAND_FILE}"
 		echo "collapse rank='$COLLAPSE_RANK1';" >> "${MEGAN_COMMAND_FILE}"
 		echo "update;" >> "${MEGAN_COMMAND_FILE}"
@@ -1060,7 +1060,7 @@ if [ "$PERFORM_CLEANUP" = "YES" ]; then
 	echo $(date +%H:%M) "Compressing fasta, fastq, and xml files..."
 	find "${ANALYSIS_DIR}" -type f -name '*.fasta' -exec ${ZIPPER} "{}" \;
 	find "${ANALYSIS_DIR}" -type f -name '*.fastq' -exec ${ZIPPER} "{}" \;
-	find "${ANALYSIS_DIR}" -type f -name '*.xml' -exec ${ZIPPER} "{}" \;
+	find "${ANALYSIS_DIR}" -type f -name '10_BLASTed.txt' -exec ${ZIPPER} "{}" \;
 	echo $(date +%H:%M) "Cleanup performed."
 else
 	echo $(date +%H:%M) "Cleanup not performed."
