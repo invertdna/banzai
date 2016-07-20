@@ -989,7 +989,7 @@ for DIR in "$DIRECTORIES"; do
 		MEGAN_SHELL_SCRIPT="${DIR}"/megan_script.sh
 
 		echo "import blastfile='${BLAST_XML}' meganFile='${MEGAN_RMA_FILE}' \
-blastFormat=BlastTAB
+blastFormat=BlastTAB \
 minScore=${MINIMUM_SCORE} \
 maxExpected=${MAX_EXPECTED} \
 topPercent=${TOP_PERCENT} \
